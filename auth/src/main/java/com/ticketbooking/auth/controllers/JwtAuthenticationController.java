@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketbooking.auth.config.JwtTokenUtil;
+import com.ticketbooking.auth.entity.Admin;
 import com.ticketbooking.auth.models.JwtRequest;
 import com.ticketbooking.auth.models.JwtResponse;
 import com.ticketbooking.auth.services.JwtUserDetailsService;
+import com.ticketbooking.auth.services.AdminService;
 
 
 @RestController
-@CrossOrigin
+
 public class JwtAuthenticationController {
 
 	@Autowired
@@ -31,6 +33,9 @@ public class JwtAuthenticationController {
 
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
+	
+	@Autowired
+	private AdminService adminService;
 
 	// @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	@PostMapping("/authenticate")
@@ -61,5 +66,11 @@ public class JwtAuthenticationController {
 	@GetMapping("/hello")
 	public String hello() {
 		return "Hello world";
+	}
+	
+	@PostMapping("/register")
+	public Admin register(@RequestBody Admin admin) {
+		System.out.println("In user controller"+admin);
+		return adminService.register(admin);
 	}
 }

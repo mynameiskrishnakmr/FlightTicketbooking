@@ -31,6 +31,7 @@ public class FlightService {
 		if (airline.isPresent()) {
 			Airline airlinecompany = airline.get();
 			flight.setAirline(airlinecompany);
+			flight.setAirlineName(airlinecompany.getAirlineName());
 			return flightrepo.save(flight);
 
 			}
@@ -88,6 +89,21 @@ public class FlightService {
 		 flightrepo.save(flight);
 		}
 		
+	}
+
+	public List<Flight> getAllFlights() {
+		return flightrepo.findAll();
+	}
+
+	public String deleteFlight(int flightid) throws FlightNotFoundException {
+
+		try{
+			flightrepo.deleteById(flightid);
+			return "Flight Deleted";
+		}
+		catch(Exception e) {
+			throw new FlightNotFoundException("No flights found for the given flightid");
+		}
 	}
 
 }

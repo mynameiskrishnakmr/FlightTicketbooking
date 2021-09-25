@@ -23,6 +23,10 @@ public class BookingHistory {
 	
 	private int noOfPassengers;
 	
+	private int pnr;
+	
+	private int flightId;
+	
 	private List<PassengerDetails> passengers;
 
 	public String getUserId() {
@@ -96,9 +100,27 @@ public class BookingHistory {
 	public void setPassengers(List<PassengerDetails> passengers) {
 		this.passengers = passengers;
 	}
+	
+	
+
+	public int getPnr() {
+		return pnr;
+	}
+
+	public void setPnr(int pnr) {
+		this.pnr = pnr;
+	}
+
+	public int getFlightId() {
+		return flightId;
+	}
+
+	public void setFlightId(int flightId) {
+		this.flightId = flightId;
+	}
 
 	public BookingHistory(String userId, String userEmail, String airlineName, String flightFrom, String flightTo,
-			LocalDate flightDate, LocalTime flightTime, int noOfPassengers, List<PassengerDetails> passengers) {
+			LocalDate flightDate, LocalTime flightTime, int noOfPassengers, List<PassengerDetails> passengers, int pnr, int flightId) {
 		super();
 		this.userId = userId;
 		this.userEmail = userEmail;
@@ -109,6 +131,8 @@ public class BookingHistory {
 		this.flightTime = flightTime;
 		this.noOfPassengers = noOfPassengers;
 		this.passengers = passengers;
+		this.pnr=pnr;
+		this.flightId=flightId;
 	}
 
 	public BookingHistory() {

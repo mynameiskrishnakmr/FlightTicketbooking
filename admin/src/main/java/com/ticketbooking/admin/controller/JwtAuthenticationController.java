@@ -18,7 +18,7 @@ import com.ticketbooking.admin.models.JwtResponse;
 import com.ticketbooking.admin.service.JwtUserDetailsService;
 
 @RestController
-@CrossOrigin
+
 public class JwtAuthenticationController {
 
 	@Autowired

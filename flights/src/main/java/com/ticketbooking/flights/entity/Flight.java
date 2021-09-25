@@ -23,7 +23,8 @@ public class Flight {
 	@JoinColumn(name = "AIRLINE_ID")
 	private Airline airline;
 
-	
+	@Column(name = "AIRLINE_NAME")
+	private String airlineName;
 	
 	@Column(name = "FLIGHT_NAME")
 	private String flightName;
@@ -148,6 +149,14 @@ public class Flight {
 	
 	
 	
+
+	public String getAirlineName() {
+		return airlineName;
+	}
+
+	public void setAirlineName(String airlineName) {
+		this.airlineName = airlineName;
+	}
 
 	public Flight(String airlineName, String flightName, String from, String to, LocalTime dateTime, LocalDate date,
 			int price, int seats, int seatsBooked ) {

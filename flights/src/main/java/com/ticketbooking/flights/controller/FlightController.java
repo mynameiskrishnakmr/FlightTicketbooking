@@ -10,6 +10,10 @@ import java.util.NoSuchElementException;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +27,7 @@ import com.ticketbooking.flights.exception.FlightNotFoundException;
 import com.ticketbooking.flights.service.FlightService;
 
 @RestController
+
 public class FlightController {
 	
 	@Autowired
@@ -37,6 +42,7 @@ public class FlightController {
 	}
 
 	@PutMapping("airline/{id}/flight/{flightid}")
+	//@CachePut(key = "#flightid", value = "flightList")
 	public Flight updateFlight(@PathVariable int id , @PathVariable int flightid, @RequestBody Flight flight) throws NullPointerException, SQLException, NoSuchElementException, FlightNotFoundException {
 		
 	    
@@ -45,6 +51,7 @@ public class FlightController {
 	}
 	
 	@GetMapping("flight/{flightid}")
+//	@Cacheable(key = "#flightid", value = "flightList")
 	public Flight getFlight(@PathVariable int flightid) throws NoSuchElementException,NullPointerException, SQLException, FlightNotFoundException {
 		
 	    
@@ -55,6 +62,7 @@ public class FlightController {
 
 
 	@GetMapping("search")
+	//@Cacheable(value = "flightList")
 	public List<Flight> getFlights(@RequestParam String from , @RequestParam String to, @RequestParam String date) throws ParseException, FlightNotFoundException, NoSuchElementException{
 		
 		
@@ -73,5 +81,22 @@ public class FlightController {
 	
 		
 	}
+	
+	
+	@GetMapping("/all")
+	
+	public List<Flight> getAllFlights() throws ParseException, FlightNotFoundException, NoSuchElementException{
+		
+		System.out.println("flightService.getAllflights----"+flightService.getAllFlights());
+			return flightService.getAllFlights()!=null? flightService.getAllFlights():  null;
+		  
+	
+		
+	}
 
+	@DeleteMapping("airline/{id}/flight/{flightid}")
+	public String deleteFlight(@PathVariable int flightid) throws FlightNotFoundException {
+		
+		return flightService.deleteFlight(flightid);
+	}
 }

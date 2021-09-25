@@ -1,5 +1,6 @@
 package com.ticketbooking.admin.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,21 @@ public class AdminService {
 		 }
 	}
 	
+	public List<DiscountCoupon> getAllCoupon(){
+		
+		return discountcouponrepo.findAll();
+	}
+
+	public String deleteCouponDetails(String couponCode) throws DiscountCouponNotFoundException {
+
+		 try{
+			 discountcouponrepo.deleteById(couponCode);
+		 }
+		 catch(Exception e){
+			 throw new DiscountCouponNotFoundException("No coupon is present" + couponCode);
+		 }
+		 
+		 return "Coupon Deleted";
+	}
 
 }
