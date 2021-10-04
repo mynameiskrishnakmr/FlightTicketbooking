@@ -1,21 +1,28 @@
 package com.ticketbooking.admin.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ticketbooking.admin.entity.Admin;
 import com.ticketbooking.admin.entity.DiscountCoupon;
 import com.ticketbooking.admin.exception.DiscountCouponNotFoundException;
 import com.ticketbooking.admin.models.Coupon;
+import com.ticketbooking.admin.repository.AdminRepository;
 import com.ticketbooking.admin.repository.DiscountCouponRepository;
+
 
 @Service
 public class AdminService {
 	
 	@Autowired
 	private DiscountCouponRepository discountcouponrepo; 
+	
+	@Autowired
+	private AdminRepository adminrepo;
 
 	public DiscountCoupon addCoupon(Coupon coupon) {
 		DiscountCoupon disCoup = new DiscountCoupon(coupon.getCouponCode(),coupon.getExpiryDate(),coupon.getStatus(),coupon.getDiscountPrice());
@@ -63,6 +70,22 @@ public class AdminService {
 		 }
 		 
 		 return "Coupon Deleted";
+	}
+
+	public Admin register(Admin admin) {
+		System.out.println("In user service");
+		if(!adminrepo.existsById(admin.getUserId())) {
+			return adminrepo.save(admin);
+		}
+		else {
+			throw new NoSuchElementException("User Id exists already");
+		}
+		
+		 
+		 
+		
+		
+		
 	}
 
 }

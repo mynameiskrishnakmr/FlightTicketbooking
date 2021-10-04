@@ -52,7 +52,7 @@ public class AdminController {
 	
 	private static final String TOPIC = "airline";
 	
-	/*@PostMapping("/airline")
+	@PostMapping("/airline")
 	public Airline addAirline(@RequestBody Airline airline) throws NullPointerException, SQLException, AirlineNotAddedException{
 		System.out.println(" in add airline");
 		HttpHeaders headers = new HttpHeaders();		
@@ -65,11 +65,11 @@ public class AdminController {
 		}
 		
 		return res.getBody();
-	}*/
+	}
 	
 	//Airline APIs
 	
-	@PostMapping("/airline")
+	/*@PostMapping("/airline")
 	public StringResponse addAirline(@RequestBody Airline airline) throws NullPointerException, SQLException, AirlineNotAddedException{
 		System.out.println(" in add airline");
 		kafkaTemplate.send(TOPIC, airline);
@@ -77,7 +77,7 @@ public class AdminController {
 		StringResponse response = new StringResponse("Airline added");
 		return response;
 		
-	}
+	}*/
 	
 	@PutMapping("/airline/{airlineid}")
 	//@Cacheable(key = "#airlineid", value = "airlineList")

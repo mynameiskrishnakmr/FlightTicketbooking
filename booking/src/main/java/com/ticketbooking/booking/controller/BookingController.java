@@ -4,11 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.ticketbooking.booking.entity.Passenger;
 import com.ticketbooking.booking.exception.CancellationNotallowedException;
 import com.ticketbooking.booking.exception.NotEnoughSeatsException;
 import com.ticketbooking.booking.exception.TicketDetailsNotFoundException;
 import com.ticketbooking.booking.model.BookingHistory;
+import com.ticketbooking.booking.model.CancelResponse;
 import com.ticketbooking.booking.model.CouponResponse;
 import com.ticketbooking.booking.model.Ticket;
 import com.ticketbooking.booking.service.BookingService;
@@ -51,7 +47,7 @@ public class BookingController {
 	}
 
 	@GetMapping("/ticket/{pnr}")
-	@Cacheable(value = "ticketDetails")
+	//@Cacheable(value = "ticketDetails")
 	public Ticket getTicketByPNR(@PathVariable int pnr)
 			throws NullPointerException, SQLException, TicketDetailsNotFoundException {
 		return bookingService.getTicketByPNR( pnr);
@@ -66,10 +62,10 @@ public class BookingController {
 	}
 
 	@DeleteMapping("/users/{userid}/cancel/{pnr}")
-	@CachePut(key = "#pnr", value = "ticketDetails")
-	public void deleteTicketByPNR(@PathVariable String userid, @PathVariable int pnr)
+	//@CachePut(key = "#pnr", value = "ticketDetails")
+	public CancelResponse deleteTicketByPNR(@PathVariable String userid, @PathVariable int pnr)
 			throws CancellationNotallowedException, TicketDetailsNotFoundException {
-		bookingService.deleteTicketByPNR(userid, pnr);
+		return bookingService.deleteTicketByPNR(userid, pnr);
 
 	}
 	

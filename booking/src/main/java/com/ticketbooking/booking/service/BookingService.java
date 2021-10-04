@@ -31,6 +31,7 @@ import com.ticketbooking.booking.exception.CancellationNotallowedException;
 import com.ticketbooking.booking.exception.NotEnoughSeatsException;
 import com.ticketbooking.booking.exception.TicketDetailsNotFoundException;
 import com.ticketbooking.booking.model.BookingHistory;
+import com.ticketbooking.booking.model.CancelResponse;
 import com.ticketbooking.booking.model.Coupon;
 import com.ticketbooking.booking.model.CouponResponse;
 import com.ticketbooking.booking.model.Flight;
@@ -87,6 +88,20 @@ public class BookingService {
 			int flightId = flightdata.getFlightId();
 			int airlineId = flightdata.getAirline().getAirlineId();
 			double price = noOfPassengers * flightdata.getPrice();
+			
+			if (discountCoupon != "" && discountCoupon != null) {
+				ResponseEntity<Coupon> couponAPI = restTemplate.exchange(
+						"http://ADMIN-SERVICE/coupon/" + discountCoupon, HttpMethod.GET, null,
+						new ParameterizedTypeReference<Coupon>() {
+						});
+
+				if (couponAPI.getStatusCode() == HttpStatus.OK) {
+					COUPON_APPLIED_STATUS = "Discount Coupon Applied";
+					price = price - noOfPassengers * (couponAPI.getBody().getDiscountPrice());
+				}
+
+			}
+			
 			BookingDetails bookTicket = new BookingDetails(flightId, Userdata, BOOKED_STATUS, price, passengers);
 			System.out.println("before setting booking details" + bookTicket.toString());
 			bookRepo.save(bookTicket);
@@ -106,18 +121,7 @@ public class BookingService {
 					new ParameterizedTypeReference<Flight>() {
 					});
 
-			if (discountCoupon != "" && discountCoupon != null) {
-				ResponseEntity<Coupon> couponAPI = restTemplate.exchange(
-						"http://ADMIN-SERVICE/coupon/" + discountCoupon, HttpMethod.GET, null,
-						new ParameterizedTypeReference<Coupon>() {
-						});
-
-				if (couponAPI.getStatusCode() == HttpStatus.OK) {
-					COUPON_APPLIED_STATUS = "Discount Coupon Applied";
-					price = price - noOfPassengers * (couponAPI.getBody().getDiscountPrice());
-				}
-
-			}
+			
 
 			System.out.println("after updating flight" + res1.getBody());
 
@@ -157,6 +161,7 @@ public class BookingService {
 				Ticket ticket = new Ticket(userId, flightName, flightDate, flightTime, airlineName, pnr,
 						passengersModel, bookingDetails.getStatus(), bookingDetails.getPrice());
 				System.out.println("userId" + userId + " FlightName:" + flightName + " Date :" + flightDate);
+				System.out.println("passengersModel" + passengersModel + " bookingDetails.getStatus():" + bookingDetails.getStatus() + " bookingDetails.getPrice() :" + bookingDetails.getPrice());
 				return ticket;
 			} else {
 				throw new NullPointerException("Flight Details not found");
@@ -215,7 +220,7 @@ public class BookingService {
 		throw new TicketDetailsNotFoundException("Ticket details not found , Please enter a valid emai");
 	}
 
-	public void deleteTicketByPNR(String userid, int pnr)
+	public CancelResponse deleteTicketByPNR(String userid, int pnr)
 			throws CancellationNotallowedException, TicketDetailsNotFoundException {
 
 		Optional<BookingDetails> bookingDetailsOptional = bookRepo.findByIdAndStatus(userid, pnr);
@@ -260,7 +265,7 @@ public class BookingService {
 							requestEntity, new ParameterizedTypeReference<Flight>() {
 							});
 					System.out.println("after updating flight" + res1.getBody());
-
+					return new CancelResponse("Ticket has been cancelled");
 				}
 
 				else {

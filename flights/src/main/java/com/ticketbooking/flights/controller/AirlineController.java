@@ -31,7 +31,7 @@ public class AirlineController {
 	
 	private static final String TOPIC ="airline";
 	
-	/*@PostMapping("/airline")
+	@PostMapping("/airline")
 	public Airline addAirline(@RequestBody Airline airline) throws NullPointerException, SQLException {
 		
 		
@@ -39,10 +39,10 @@ public class AirlineController {
 		
 		return airlineService.addAirline(airline);
 		
-	}*/
+	}
 	
 	
-	@KafkaListener(topics = TOPIC, groupId="group_id", containerFactory = "userKafkaListenerFactory")
+	/*@KafkaListener(topics = TOPIC, groupId="group_id", containerFactory = "userKafkaListenerFactory")
 	public Airline addAirline(com.ticketbooking.admin.dto.Airline airline) throws NullPointerException, SQLException {
 		
 		Airline airlineEntity = airline.getAirlineEntity();
@@ -52,7 +52,7 @@ public class AirlineController {
 		
 		//return null;
 		
-	}
+	}*/
 	
 	@PutMapping("/airline/{id}")
 	//@CachePut(key = "#id", value = "airlineList")
